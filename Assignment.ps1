@@ -11,13 +11,51 @@ $choice = 0
 
 ### Begin Define Function
 
+$menu1 = @(
+    "1. Test Connection `n",
+    "2. Get Information `n",
+    "3. Display Website `n",
+    "4. Back to Main Menu")
+
+$menu3 = @(
+    "1. Create Sessions `n",
+    "2. Enter Sessions `n",
+    "3. Disconnect Sessions `n",
+    "4. Kill Sessions `n",
+    "5. Exit")
+$menu4 = @(
+    "1. Check Active Accounts `n",
+    "2. ?? `n",
+    "3. Exit")
+$menu5 = @(
+    "1. Create User `n",
+    "2. Create Group `n",
+    "3. Limit user using Powershell `n",
+    "4. Exit")
+$menu6 = @(
+    "1. Get Computer Infor `n",
+    "2. Add New User `n",
+    "3. Get users infor `n",
+    "4. Set Restricted rule for User",
+    "5. Exit")
+$menu8 = @(
+    "1. Check Picture Folder `n",
+    "2. Copy Picture `n",
+    "3. Exit")
+$menu9 = @(
+    "1. Save computers to file `n",
+    "2. Check Firewall Status `n",
+    "3. Get Software authorized `n",
+    "4. Exit")
+
 function MainMenu ()
+{
+    Do
 {
     Clear-Host
     "`n"
     "                  Win500 - Assignment            `n" 
-    "-------------------------------------------------
-    "
+    "------------------------------------------------- `n "
     Write-Host "
     1. Get Servers Informations `n
     2. Restart all the servers `n
@@ -29,166 +67,248 @@ function MainMenu ()
     8. Jpeg files `n
     9. Firewall Status `n
     10. Exit `n" 
+     
+     
+
+
+    [int]$option = Read-Host "Enter option "
+
+    switch ($option)
+    {
+       '1' {Clear-Host;Sub_menu1}
+       '2' {Clear-Host;Sub_menu2}
+       '3' {Clear-Host;Sub_menu3}
+       '4' {Clear-Host;Sub_menu4}
+       '5' {Clear-Host;Sub_menu5}
+       '6' {Clear-Host;Sub_menu6}
+       '7' {Clear-Host;Sub_menu7}
+       '8' {Clear-Host;Sub_menu8}
+       '9' {Clear-Host;Sub_menu9}
+       '10' {Clear-Host;break}
+       Default {Write-Host "Wrong Option"}
+    }
+  
+}
+until ($option -eq 10)
+     
                 
 }
 
+################ SECTION BREAK ##############
 
-function Sub_menu1 ()
+function Sub_menu1()
 {
-    
+do
+{
     Clear-Host
+    $menu1
     "`n"
-    "                  Get Servers Informations            `n" 
-    "-------------------------------------------------
-    "
+    [int]$choice = Read-Host "Enter choice "
     
-    switch ($option)
+    switch ($choice)
     {
-        '1' {$menu_1}
-        '2' {$menu_2}
-        '3' {"c"}
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
         '4' {MainMenu}
-
-        Default {}
-    }
-           
+        Default {"Wrong Choice"}
+    }    
+}
+until ($choice -eq 4)
+     
 }
 
-function Sub_menu3 ()
-{
-    
-    Clear-Host
-    "`n"
-    "                 Sessions            `n" 
-    "-------------------------------------------------
-    "
-    
-    switch ($option)
-    {
-        '1' {$menu_1}
-        '2' {$menu_2}
-        '3' {"c"}
-        '4' {MainMenu}
+################ SECTION BREAK ##############
 
-        Default {}
-    }
-           
+function Sub_menu2()
+{
+do
+{
+    Clear-Host
+    $menu1
+    "`n"
+    [int]$choice = Read-Host "Enter choice "
+    
+    switch ($choice)
+    {
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
+        '4' {MainMenu}
+        Default {"Wrong Choice"}
+    }    
+}
+until ($choice -eq 4)
+     
 }
 
-function Sub_menu4 ()
-{
-    
-    Clear-Host
-    "`n"
-    "                 Sessions            `n" 
-    "-------------------------------------------------
-    "
-    
-    switch ($option)
-    {
-        '1' {$menu_1}
-        '2' {$menu_2}
-        '3' {"c"}
-        '4' {MainMenu}
+################ SECTION BREAK ##############
 
-        Default {}
-    }
-           
+function Sub_menu3()
+{
+do
+{
+    Clear-Host
+    $menu1
+    "`n"
+    [int]$choice = Read-Host "Enter choice "
+    
+    switch ($choice)
+    {
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
+        '4' {MainMenu}
+        Default {"Wrong Choice"}
+    }    
+}
+until ($choice -eq 4)
+     
 }
 
-function Sub_menu5 ()
-{
-    
-    Clear-Host
-    "`n"
-    "                 Sessions            `n" 
-    "-------------------------------------------------
-    "
-    
-    switch ($option)
-    {
-        '1' {$menu_1}
-        '2' {$menu_2}
-        '3' {"c"}
-        '4' {MainMenu}
 
-        Default {}
-    }
-           
+################ SECTION BREAK ##############
+
+function Sub_menu4()
+{
+do
+{
+    Clear-Host
+    $menu1
+    "`n"
+    [int]$choice = Read-Host "Enter choice "
+    
+    switch ($choice)
+    {
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
+        '4' {MainMenu}
+        Default {"Wrong Choice"}
+    }    
+}
+until ($choice -eq 4)
+     
 }
 
-function Sub_menu6 ()
+################ SECTION BREAK ##############
+function Sub_menu5()
 {
-    
-    Clear-Host
-    "`n"
-    "                 Sessions            `n" 
-    "-------------------------------------------------
-    "
-    
-    switch ($option)
-    {
-        '1' {$menu_1}
-        '2' {$menu_2}
-        '3' {"c"}
-        '4' {MainMenu}
-
-        Default {}
-    }
-           
-}
-function Sub_menu8 ()
+do
 {
-    
     Clear-Host
+    $menu1
     "`n"
-    "                 Sessions            `n" 
-    "-------------------------------------------------
-    "
+    [int]$choice = Read-Host "Enter choice "
     
-    switch ($option)
+    switch ($choice)
     {
-        '1' {$menu_1}
-        '2' {$menu_2}
-        '3' {"c"}
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
         '4' {MainMenu}
-
-        Default {}
-    }
-           
+        Default {"Wrong Choice"}
+    }    
 }
-function Sub_menu9 ()
+until ($choice -eq 4)
+     
+}
+
+################ SECTION BREAK ##############
+
+function Sub_menu6()
 {
-    
+do
+{
     Clear-Host
+    $menu1
     "`n"
-    "                 Sessions            `n" 
-    "-------------------------------------------------
-    "
+    [int]$choice = Read-Host "Enter choice "
     
-    switch ($option)
+    switch ($choice)
     {
-        '1' {$menu_1}
-        '2' {$menu_2}
-        '3' {"c"}
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
         '4' {MainMenu}
-
-        Default {}
-    }
-           
+        Default {"Wrong Choice"}
+    }    
 }
-$menu_1 = "
-    1. Get Servers Informations `n
-    2. Restart all the servers `n
-    3. menu1 `n
-    10. Exit"
+until ($choice -eq 4)
+     
+}
 
-$menu_2 = "
-    1. Get Servers Informations `n
-    2. Restart all the servers `n
-    3. menu2 `n
-    10. Exit"
+################ SECTION BREAK ##############
 
+function Sub_menu7()
+{
+do
+{
+    Clear-Host
+    $menu1
+    "`n"
+    [int]$choice = Read-Host "Enter choice "
+    
+    switch ($choice)
+    {
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
+        '4' {MainMenu}
+        Default {"Wrong Choice"}
+    }    
+}
+until ($choice -eq 4)
+     
+}
+
+################ SECTION BREAK ##############
+
+function Sub_menu8()
+{
+do
+{
+    Clear-Host
+    $menu1
+    "`n"
+    [int]$choice = Read-Host "Enter choice "
+    
+    switch ($choice)
+    {
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
+        '4' {MainMenu}
+        Default {"Wrong Choice"}
+    }    
+}
+until ($choice -eq 4)
+     
+}
+
+################ SECTION BREAK ##############
+
+function Sub_menu9()
+{
+do
+{
+    Clear-Host
+    $menu1
+    "`n"
+    [int]$choice = Read-Host "Enter choice "
+    
+    switch ($choice)
+    {
+        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '2' {"Test2"}
+        '3' {}
+        '4' {MainMenu}
+        Default {"Wrong Choice"}
+    }    
+}
+until ($choice -eq 4)
+     
+}
 
 
 ## End Define Function
@@ -197,16 +317,9 @@ $menu_2 = "
 
 # Script START
 
-MainMenu
-[int]$option = Read-Host "Enter option "
 
-switch ($option)
-{
-   '1' {Clear-Host;Sub_menu(1)}
-   '2' {Clear-Host;Sub_menu(2)}
-   Default {Write-Host "Wrong Option"}
-}
-  
+ MainMenu
+
 
 
 
