@@ -121,25 +121,9 @@ until ($choice -eq 4)
 
 ################ SECTION BREAK ##############
 
-function Sub_menu2()
+function Sub_menu2()  ## Action function
 {
-do
-{
-    Clear-Host
-    $menu2
-    "`n"
-    [int]$choice = Read-Host "Enter choice "
-    
-    switch ($choice)
-    {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
-        '2' {"Test2"}
-        '3' {}
-        '4' {MainMenu}
-        Default {"Wrong Choice"}
-    }    
-}
-until ($choice -eq 4)
+
      
 }
 
@@ -241,25 +225,9 @@ until ($choice -eq 4)
 
 ################ SECTION BREAK ##############
 
-function Sub_menu7()
+function Sub_menu7()   ## Action Function
 {
-do
-{
-    Clear-Host
-    $menu7
-    "`n"
-    [int]$choice = Read-Host "Enter choice "
-    
-    switch ($choice)
-    {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
-        '2' {"Test2"}
-        '3' {}
-        '4' {MainMenu}
-        Default {"Wrong Choice"}
-    }    
-}
-until ($choice -eq 4)
+
      
 }
 
