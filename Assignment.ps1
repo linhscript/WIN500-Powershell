@@ -7,6 +7,9 @@ Clear-Host
 ## Input
 $option = 0
 $choice = 0
+
+$computers = Get-ADcomputer -filter * | Select -ExpandProperty Name
+$path_name= C:\Temp
 ## End Input
 
 ### Begin Define Function
@@ -99,6 +102,14 @@ until ($option -eq 10)
 
 function Sub_menu1()
 {
+
+function s1.2 (){
+    $diskinfo = Get-CimInstance -ComputerName $computers -ClassName Win32_LogicalDisk | Select-Object DeviceID,@{Label="Total Size (MB)";Expression={$_.Size /1MB -as [int]}},@{Label="Freespace (MB)";Expression={$_.freespace /1MB -as [int]}}
+    $raminfo = Get-CimInstance Win32_computersystem -ComputerName $computers | Select-Object @{Label="Ram (GB)";Expression={$_.TotalPhysicalMemory /1GB -as [int]}}
+
+}
+
+
 do
 {
     Clear-Host
@@ -108,7 +119,7 @@ do
     
     switch ($choice)
     {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
+        '1' {}
         '2' {"Test2"}
         '3' {}
         '4' {MainMenu}
@@ -281,6 +292,7 @@ until ($choice -eq 4)
 
 
 ## End Define Function
+
 
 
 
