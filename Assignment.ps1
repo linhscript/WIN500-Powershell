@@ -50,6 +50,7 @@ $menu9 = @(
 
 function MainMenu ()
 {
+    
     Do
 {
     Clear-Host
@@ -84,7 +85,7 @@ function MainMenu ()
        '7' {Clear-Host;Sub_menu7}
        '8' {Clear-Host;Sub_menu8}
        '9' {Clear-Host;Sub_menu9}
-       '10' {Clear-Host;break}
+       '10' {Clear-Host;exit}
        Default {Write-Host "Wrong Option"}
     }
   
@@ -125,7 +126,7 @@ function Sub_menu2()
 do
 {
     Clear-Host
-    $menu1
+    $menu2
     "`n"
     [int]$choice = Read-Host "Enter choice "
     
@@ -149,7 +150,7 @@ function Sub_menu3()
 do
 {
     Clear-Host
-    $menu1
+    $menu3
     "`n"
     [int]$choice = Read-Host "Enter choice "
     
@@ -174,7 +175,7 @@ function Sub_menu4()
 do
 {
     Clear-Host
-    $menu1
+    $menu4
     "`n"
     [int]$choice = Read-Host "Enter choice "
     
@@ -197,7 +198,7 @@ function Sub_menu5()
 do
 {
     Clear-Host
-    $menu1
+    $menu5
     "`n"
     [int]$choice = Read-Host "Enter choice "
     
@@ -221,7 +222,7 @@ function Sub_menu6()
 do
 {
     Clear-Host
-    $menu1
+    $menu6
     "`n"
     [int]$choice = Read-Host "Enter choice "
     
@@ -245,7 +246,7 @@ function Sub_menu7()
 do
 {
     Clear-Host
-    $menu1
+    $menu7
     "`n"
     [int]$choice = Read-Host "Enter choice "
     
@@ -269,7 +270,7 @@ function Sub_menu8()
 do
 {
     Clear-Host
-    $menu1
+    $menu8
     "`n"
     [int]$choice = Read-Host "Enter choice "
     
@@ -293,7 +294,7 @@ function Sub_menu9()
 do
 {
     Clear-Host
-    $menu1
+    $menu9
     "`n"
     [int]$choice = Read-Host "Enter choice "
     
