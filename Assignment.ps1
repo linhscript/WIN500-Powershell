@@ -150,16 +150,27 @@ foreach ($s12 in $valid_computers)
 
     
 }
+
     $Global:out | ft | Out-File $path_name\computer_info.txt
     Write-Host "File has been saved to C:\Temp\computer_info.txt"
 }
 
 function s1.3(){
 #check if function S1.1 has ran or not
-if ($out.Count -eq 0){s1.2}
+if ($global:out.Count -eq 0){s1.2}
 
 Clear-Host
-$out | ConvertTo-Html -Fragment | Out-file $path_name\computer_info.html
+ 
+$global:out  | ConvertTo-Html | Out-file $path_name\computer_info.html
+
+    if ($unvalid_computer.Count -ne 0){
+        foreach ($unvalid in $global:unvalid_computer)
+        {
+            Write-Output " Server: $unvalid" | Out-File $path_name\computer_info.html -Append
+        }
+        
+    }
+    
 Invoke-Item $path_name\computer_info.html
 
 }
@@ -189,7 +200,7 @@ until ($choice -eq 4)
 function Sub_menu2()  ## Action function
 {
 
-     
+    
 }
 
 ################ SECTION BREAK ##############
