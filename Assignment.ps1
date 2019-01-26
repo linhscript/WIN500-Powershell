@@ -143,7 +143,8 @@ do
         '1' {Get-EventLog -Newest 5 -LogName Application; pause}
         '2' {"Test2"}
         '3' {}
-        '4' {MainMenu}
+        '4' {}
+        '5' {MainMenu}
         Default {"Wrong Choice"}
     }    
 }
@@ -167,8 +168,7 @@ do
     {
         '1' {Get-EventLog -Newest 5 -LogName Application; pause}
         '2' {"Test2"}
-        '3' {}
-        '4' {MainMenu}
+        '3' {MainMenu}
         Default {"Wrong Choice"}
     }    
 }
@@ -215,7 +215,8 @@ do
         '1' {Get-EventLog -Newest 5 -LogName Application; pause}
         '2' {"Test2"}
         '3' {}
-        '4' {MainMenu}
+        '4' {}
+        '5' {MainMenu}
         Default {"Wrong Choice"}
     }    
 }
@@ -246,8 +247,7 @@ do
     {
         '1' {Get-EventLog -Newest 5 -LogName Application; pause}
         '2' {"Test2"}
-        '3' {}
-        '4' {MainMenu}
+        '3' {MainMenu}
         Default {"Wrong Choice"}
     }    
 }
