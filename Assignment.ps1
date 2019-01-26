@@ -9,7 +9,7 @@ $option = 0
 $choice = 0
 
 $computers = Get-ADcomputer -filter * | Select -ExpandProperty Name
-$path_name= C:\Temp
+$path_name= "C:\Temp"
 ## End Input
 
 ### Begin Define Function
@@ -103,12 +103,66 @@ until ($option -eq 10)
 function Sub_menu1()
 {
 
-function s1.2 (){
-    $diskinfo = Get-CimInstance -ComputerName $computers -ClassName Win32_LogicalDisk | Select-Object DeviceID,@{Label="Total Size (MB)";Expression={$_.Size /1MB -as [int]}},@{Label="Freespace (MB)";Expression={$_.freespace /1MB -as [int]}}
-    $raminfo = Get-CimInstance Win32_computersystem -ComputerName $computers | Select-Object @{Label="Ram (GB)";Expression={$_.TotalPhysicalMemory /1GB -as [int]}}
+function s1.1(){
+
+Clear-Host
+$global:valid_computers = @()
+$global:unvalid_computer =@()
+foreach ($s11 in $computers)
+
+{
+    if  (-Not (Test-Connection -ComputerName $s11 -Count 1 -Quiet)){
+        Write-Output "$s11 Not Available `n" | Tee-Object $path_name\test-connection.txt 
+        $global:unvalid_computer += $s11
+    }else{
+        Test-Connection -ComputerName $s11 -Count 1 
+        $global:valid_computers += $s11
+        "`n" 
+    }
+}
 
 }
 
+function s1.2 (){
+
+#check if function S1.1 has ran or not
+if ($valid_computers.Count -eq 0){s1.1}
+
+$Global:out = @()
+foreach ($s12 in $valid_computers)
+{
+    $comp = @{}
+    $diskinfo = Get-CimInstance  -ClassName Win32_LogicalDisk -ComputerName $s12  | ? {$_.DriveType -eq 3}
+    $raminfo = Get-CimInstance Win32_computersystem -ComputerName $s12 
+    $system = Get-CimInstance Win32_OperatingSystem -ComputerName $s12
+    
+    $comp.Add("Server",$system.CSName)
+    $comp.Add("Type",$system.Caption)
+    $comp.Add("Serial Number",$system.SerialNumber)
+    $comp.Add("Device",$diskinfo.DeviceID)
+    $comp.Add("Disk Size","$([math]::round($diskinfo.Size /1MB))" + " MB" )
+    $comp.Add("Free Space","$([math]::round($diskinfo.Freespace /1MB))" + " MB" )
+    $comp.Add("RAM","$([math]::round($raminfo.TotalPhysicalMemory /1GB))" + " GB")
+
+
+    $Global:out += New-Object psobject -Property $comp | Select-Object "Server","Type","Serial Number","Device","Disk Size",`
+                                                                "Free Space","RAM" 
+
+    
+}
+    $Global:out | ft | Out-File $path_name\computer_info.txt
+    Write-Host "File has been saved to C:\Temp\computer_info.txt"
+}
+
+function s1.3(){
+#check if function S1.1 has ran or not
+if ($out.Count -eq 0){s1.2}
+
+Clear-Host
+$out | ConvertTo-Html -Fragment | Out-file $path_name\computer_info.html
+Invoke-Item $path_name\computer_info.html
+
+}
 
 do
 {
@@ -119,9 +173,9 @@ do
     
     switch ($choice)
     {
-        '1' {}
-        '2' {"Test2"}
-        '3' {}
+        '1' {s1.1;pause}
+        '2' {s1.2;Pause}
+        '3' {s1.3;Pause}
         '4' {MainMenu}
         Default {"Wrong Choice"}
     }    
