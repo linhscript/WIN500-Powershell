@@ -395,6 +395,11 @@ until ($choice -eq 4)
 
 function Sub_menu9()
 {
+function 9.1(){
+   $computers | Out-File $path_name\mysystems.txt
+   Invoke-Command -ComputerName (gc $path_name\mysystems.txt ) -ScriptBlock {netsh advfirewall set allprofiles state on}
+}
+
 do
 {
     Clear-Host
