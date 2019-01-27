@@ -280,6 +280,41 @@ function Sub_menu4()
 ################ SECTION BREAK ##############
 function Sub_menu5()
 {
+
+function s5.1{
+
+    Clear-Host
+    $global:username = Read-Host "Enter the username "
+
+    ##Check if user exists or not
+    if (-not (dsquery user -samid $username)){
+    New-ADUser -SamAccountName $username `
+    -Enabled $true `
+    -AccountPassword (ConvertTo-SecureString -AsPlainText "P@ssw0rd" -Force)`
+    -Name $username
+
+    }else{
+        Write-Host "Username already exists"
+    }
+}
+
+function s5.2{
+
+    Clear-Host
+    $groupname = Read-Host "Enter Group Name "
+    if (-not(dsquery group -samid $groupname)){
+        New-ADGroup -name $groupname -GroupScope Global -SamAccountName $groupname
+    
+        Add-ADGroupMember -Identity $groupname -Members $username
+        Add-ADGroupMember -Identity $groupname -Members Administrator
+
+        Write-Host "`n Users have been added to the group`n"
+    }else{
+        Write-Host "`nGroup already exists`n"     
+    }
+}
+
+
 do
 {
     Clear-Host
@@ -289,9 +324,9 @@ do
     
     switch ($choice)
     {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
-        '2' {"Test2"}
-        '3' {}
+        '1' {s5.1;Pause}
+        '2' {s5.2;Pause}
+        '3' {s5.3;Pause}
         '4' {MainMenu}
         Default {"Wrong Choice"}
     }    
