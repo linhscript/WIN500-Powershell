@@ -26,10 +26,6 @@ $menu3 = @(
     "3. Disconnect Sessions `n",
     "4. Kill Sessions `n",
     "5. Exit")
-$menu4 = @(
-    "1. Check Active Accounts `n",
-    "2. ?? `n",
-    "3. Exit")
 $menu5 = @(
     "1. Create User `n",
     "2. Create Group `n",
@@ -207,6 +203,29 @@ function Sub_menu2()  ## Action function
 
 function Sub_menu3()
 {
+function s3.1(){
+    Clear-Host
+    $session_name = Read-Host "Enter a Session Name "
+    $session_computer = Read-Host "Enter computer want to connect "
+    New-PSSession -ComputerName $session_computer -Name $session_name
+    Get-PSSession
+
+}
+
+function s3.3(){
+
+    Clear-Host
+    Get-PSSession
+    
+}
+
+function s3.4(){
+
+    Clear-Host
+    Remove-PSSession *
+    
+}
+
 do
 {
     Clear-Host
@@ -216,10 +235,10 @@ do
     
     switch ($choice)
     {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
-        '2' {"Test2"}
-        '3' {}
-        '4' {}
+        '1' {s3.1; pause}
+        '2' {s3.2;Pause}
+        '3' {s3.3;Pause}
+        '4' {s3.4;Pause}
         '5' {MainMenu}
         Default {"Wrong Choice"}
     }    
@@ -233,23 +252,29 @@ until ($choice -eq 4)
 
 function Sub_menu4()
 {
-do
-{
+
     Clear-Host
-    $menu4
-    "`n"
-    [int]$choice = Read-Host "Enter choice "
+    $user_check = Read-Host "Enter user you want to check "
+    if (dsquery user -samid $user_check) {
+
+        if ((Get-ADUser -Identity $user_check ).Enabled){
+
+             Write-Host "`nUser $user_check is ACTIVE `n"
+
+             $logon=(Get-ADUser -Identity $user_check -Properties "LastLogonDate" ).LastLogonDate
+             if ($logon){
+
+                Write-Host "User $user_check has last Login at: $logon"
+              }else{
+                 Write-Host "User $user_check never loged on the system"   
+                }
+         }else{
+             Write-Host "`nUser $user_check is NOT ACTIVE `n"
+         }
+    }else{
+         Write-Host "User $user_check is not available"
+    }
     
-    switch ($choice)
-    {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
-        '2' {"Test2"}
-        '3' {MainMenu}
-        Default {"Wrong Choice"}
-    }    
-}
-until ($choice -eq 4)
-     
 }
 
 ################ SECTION BREAK ##############
