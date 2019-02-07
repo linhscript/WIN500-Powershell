@@ -199,7 +199,7 @@ function Sub_menu2()  ## Action function
     
 }
 
-################ SECTION BREAK ##############
+################ SESSIONS ##############
 
 function Sub_menu3()
 {
@@ -248,7 +248,7 @@ until ($choice -eq 4)
 }
 
 
-################ SECTION BREAK ##############
+################ REMOTE FUNCTIONS ##############
 
 function Sub_menu4()
 {
