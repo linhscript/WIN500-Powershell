@@ -277,7 +277,7 @@ function Sub_menu4()
     
 }
 
-################ SECTION BREAK ##############
+################ USERS AND COMPUTERS ##############
 function Sub_menu5()
 {
 
@@ -314,6 +314,11 @@ function s5.2{
     }
 }
 
+function s5.3{
+
+    Clear-Host
+
+}
 
 do
 {
@@ -368,7 +373,7 @@ function Sub_menu7()   ## Action Function
      
 }
 
-################ SECTION BREAK ##############
+################ JPEG FILES ##############
 
 function Sub_menu8()
 {
@@ -391,7 +396,7 @@ until ($choice -eq 4)
      
 }
 
-################ SECTION BREAK ##############
+################ FIREWALL STATUS ##############
 
 function Sub_menu9()
 {
