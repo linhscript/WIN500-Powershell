@@ -1,5 +1,9 @@
-﻿<#
+<#
  # Made by Linh Van Ha - Assignment
+ Before running script, make sure allow ICMP on all VMS
+
+ netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" protocol="icmpv4:8,any" dir=in action=allow
+
 #>
 
 Clear-Host
@@ -35,7 +39,7 @@ $menu6 = @(
     "1. Get Computer Infor `n",
     "2. Add New User `n",
     "3. Get users infor `n",
-    "4. Set Restricted rule for User",
+    "4. Set Restricted rule for User `n",
     "5. Exit")
 $menu8 = @(
     "1. Check Picture Folder `n",
@@ -167,7 +171,7 @@ $global:out  | ConvertTo-Html | Out-file $path_name\computer_info.html
         
     }
     
-Invoke-Item $path_name\computer_info.html
+start $path_name\computer_info.html
 
 }
 
@@ -195,11 +199,31 @@ until ($choice -eq 4)
 
 function Sub_menu2()  ## Action function
 {
+    $reset_coms = Get-ADComputer -Filter 'Name -notlike "SRV1-AD"' | Select-Object -ExpandProperty Name
 
+    foreach ($item in $reset_coms)
+    {
+        Restart-Computer -ComputerName $item
+        sleep 5
+        do {
+            Write-Host "Server $item is restarting `n"
+        }until (Test-Connection $item -Quiet)
+     
+        Write-Host "RESTART DONE `n"   
+        sleep 3
+        $ip = (Test-Connection -ComputerName $item -ErrorAction SilentlyContinue).IPV4Address.IPaddresstostring[0]
+        $st = (Get-CimInstance -ComputerName $item -ClassName Win32_operatingsystem).LastBootUpTime
+
+        Write-Host "Server $item "
+        Write-Host "Status:  Running"
+        Write-Host "IP Address: $ip"
+        Write-Host "Startup Time: $st `n"
     
+    }
+    Pause
 }
 
-################ SESSIONS ##############
+################ SECTION BREAK ##############
 
 function Sub_menu3()
 {
@@ -216,14 +240,14 @@ function s3.3(){
 
     Clear-Host
     Get-PSSession
-    
+       
 }
 
 function s3.4(){
 
     Clear-Host
     Remove-PSSession *
-    
+        
 }
 
 do
@@ -248,7 +272,7 @@ until ($choice -eq 4)
 }
 
 
-################ REMOTE FUNCTIONS ##############
+################ User ##############
 
 function Sub_menu4()
 {
@@ -277,7 +301,7 @@ function Sub_menu4()
     
 }
 
-################ USERS AND COMPUTERS ##############
+################ GROUP ##############
 function Sub_menu5()
 {
 
@@ -301,12 +325,12 @@ function s5.1{
 function s5.2{
 
     Clear-Host
-    $groupname = Read-Host "Enter Group Name "
-    if (-not(dsquery group -samid $groupname)){
-        New-ADGroup -name $groupname -GroupScope Global -SamAccountName $groupname
+    $global:groupname = Read-Host "Enter Group Name "
+    if (-not(dsquery group -samid $global:groupname)){
+        New-ADGroup -name $global:groupname -GroupScope Global -SamAccountName $global:groupname
     
-        Add-ADGroupMember -Identity $groupname -Members $username
-        Add-ADGroupMember -Identity $groupname -Members Administrator
+        Add-ADGroupMember -Identity $global:groupname -Members $username
+        Add-ADGroupMember -Identity $global:groupname -Members Administrator
 
         Write-Host "`n Users have been added to the group`n"
     }else{
@@ -315,8 +339,12 @@ function s5.2{
 }
 
 function s5.3{
-
+    
     Clear-Host
+
+    Write-Host "Group $global:groupname  has been restricted to use Powershell"
+    Set-GPPermission -Name "Limit Use Powershell" -PermissionLevel GpoApply -TargetName $global:groupname -TargetType Group
+    gpupdate /force
 
 }
 
@@ -340,10 +368,17 @@ until ($choice -eq 4)
      
 }
 
-################ SECTION BREAK ##############
+################ MODULE ##############
 
 function Sub_menu6()
 {
+
+if (-not (Get-Module mycmdlets)){
+    Import-Module mycmdlets -Force
+}
+
+Write-Host "Imported Module MYCMDLETS Successfully" -ForegroundColor Green; Pause
+
 do
 {
     Clear-Host
@@ -353,10 +388,10 @@ do
     
     switch ($choice)
     {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
-        '2' {"Test2"}
-        '3' {}
-        '4' {}
+        '1' {gcif; pause}
+        '2' {anu;Pause}
+        '3' {gui;Pause}
+        '4' {slt;Pause}
         '5' {MainMenu}
         Default {"Wrong Choice"}
     }    
@@ -365,7 +400,7 @@ until ($choice -eq 4)
      
 }
 
-################ SECTION BREAK ##############
+################ ENDPOINT ##############
 
 function Sub_menu7()   ## Action Function
 {
@@ -373,10 +408,72 @@ function Sub_menu7()   ## Action Function
      
 }
 
-################ JPEG FILES ##############
+################ JPEG FILE ##############
 
 function Sub_menu8()
 {
+
+function s8.1(){
+
+    foreach ($com in $computers)
+    {
+        $path = "\\$com\c$\Temp\Picture"
+
+        if (-not(Test-Path $path)){
+            Write-Host "Picture folder is not exist on server $com. Creating Picture Folder"
+
+            Invoke-Command -ComputerName $com -ScriptBlock {New-Item -Path C:\Temp\Picture -ItemType directory -Force}
+
+        }else{
+            Write-Host "Server $com already has Picture folder"
+        }
+    }
+
+}
+
+
+function s8.2(){
+    
+    $script_8 = 
+
+    {
+        $pic = Get-ChildItem -Path C:\Temp\Picture
+        $allfiles = Get-ChildItem -Recurse -Include *jpg -path C:\Users | Where Directory -NotLike "*Picture*" 
+
+        foreach ($item in $allfiles)
+        {
+            if ($item.Name -notin $pic.Name)
+            {
+                Copy-Item $item.FullName -Destination "C:\Temp\Picture" -Force
+                Write-Output $item.Name
+            }
+        }
+
+    }
+
+    $display = @()
+
+    foreach ($com in $computers)
+    {
+    $a = Invoke-Command -ComputerName $com -ScriptBlock $script_8 
+
+        foreach ($file in $a)
+        {
+            $display += New-Object psobject -Property @{
+            Server = $com
+            Files = $file
+            Status = "Copied Successfully"
+
+            }  | select Server, Files, Status
+        }
+
+
+    }
+     $display
+
+}
+
+
 do
 {
     Clear-Host
@@ -386,8 +483,8 @@ do
     
     switch ($choice)
     {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
-        '2' {"Test2"}
+        '1' {s8.1; pause}
+        '2' {s8.2; Pause}
         '3' {MainMenu}
         Default {"Wrong Choice"}
     }    
@@ -396,14 +493,94 @@ until ($choice -eq 4)
      
 }
 
-################ FIREWALL STATUS ##############
+################ SECTION BREAK ##############
 
 function Sub_menu9()
 {
-function 9.1(){
-   $computers | Out-File $path_name\mysystems.txt
-   Invoke-Command -ComputerName (gc $path_name\mysystems.txt ) -ScriptBlock {netsh advfirewall set allprofiles state on}
+function s9.1(){
+   $computers | Out-File "$path_name\mysystems.txt"
+   Write-Host "Computer name has been saved to mysystemss.txt file"
 }
+
+
+function s9.2(){
+
+$fw_result =@()
+$global:fw_rule_list = @()
+$fwscript ={(netsh advfirewall show allprofiles state)[3] -replace 'State' -replace '\s'}
+$fw_rule_script = {netsh advfirewall firewall show rule name=all status=enabled profile=domain }
+
+foreach ($sv in $computers)
+{
+
+    $hash_computer = @{}
+    $fw_program = @{}
+    
+    
+    if (Test-Connection -ComputerName $sv -Count 1 -Quiet){
+        try
+        {
+            $check = Invoke-Command -ComputerName $sv -ScriptBlock $fwscript
+            if ($check -eq "OFF"){
+               Invoke-Command -ComputerName (gc $path_name\mysystems.txt ) -ScriptBlock {netsh advfirewall set allprofiles state on} 
+               Write-Host "Turning ON firewall on Server $sv"
+            }    
+
+            $status = Invoke-Command -ComputerName $sv -ScriptBlock $fwscript
+            ##############################################################
+
+            $fw_rule = Invoke-Command -ComputerName $sv -ScriptBlock $fw_rule_script
+
+
+
+        }
+        catch 
+        {
+            $status =  "Can not get Firewall Status"
+        }
+
+    }else{
+    
+            $status =  "Can not connect to server"
+    
+    }
+        $hash_computer.Add("Server",$sv)
+        $hash_computer.Add("Status",$status)
+        
+        $fw_result += New-Object psobject -Property $hash_computer | Select-Object "Server","Status" 
+
+        $j = @()
+        foreach ($rule in $fw_rule)
+        {
+            if ( $rule -like "Rule name*"){
+    
+                
+                $j += $rule.Split(":")[1].trim()
+                
+                
+            }
+        }
+        $fw_program.Add("Server",$sv)
+        $fw_program.Add("Rule",$j)
+
+        $global:fw_rule_list += New-Object psobject -Property $fw_program | Select-Object "Server","Rule" 
+
+
+       
+}
+
+$fw_result | ft -AutoSize 
+
+}
+
+function s9.3(){
+
+
+$fw_rule_list | ft -AutoSize 
+
+
+}
+
 
 do
 {
@@ -414,9 +591,9 @@ do
     
     switch ($choice)
     {
-        '1' {Get-EventLog -Newest 5 -LogName Application; pause}
-        '2' {"Test2"}
-        '3' {}
+        '1' {s9.1; Pause}
+        '2' {s9.2;Pause}
+        '3' {s9.3;Pause}
         '4' {MainMenu}
         Default {"Wrong Choice"}
     }    
