@@ -1,0 +1,6 @@
+SamAccountName,Name,FirstName,LastName,DisplayName,Title,userPrincipalName,Email,EmployeeID
+sanjay.patel,Sanjay Patel,Sanjay,Patel,Sanjay Patel,Developer,sanjayp@droy.com,sanjayp@droy.com,Dev001
+manohar.zaray,Manohar Zaray,Manohar,Zaray,Manohar Zaray,Developer,manoharz@droy.com,manoharz@droy.com,Dev002
+uma.siveram,Uma Siveram,Uma,Siveram,Uma Siveram,Developer,umas@droy.com,umas@droy.com,Dev003
+dmitry.sorisky,Dmitry Sorisky,Dmitry,Sorisky,Dmitry Sorisky,Developer,dmitrys@droy.com,dmitrys@droy.com,Dev004
+joe.brennan,Joe Brennan,Joe,Brennan,Joe Brennan,Developer,joeb@droy.com,joeb@droy.com,Dev005

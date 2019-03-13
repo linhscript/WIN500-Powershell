@@ -1,0 +1,7 @@
+SurName,GivenName,SamAccountName,Name,AccountPassword,Path
+Banner,Bruce,BruceBanner,Bruce Banner,Itisgood2Bbad!,"CN=Users, DC=WIN500, DC=local"
+Kent,Clark,ClarkKent,Clark Kent,,"CN=Users, DC=WIN500, DC=local"
+Parr,Helen,HelenParr,Helen Parr,Itisgood2Bbad!,"CN=Users, DC=WIN500, DC=local"
+Parker,Peter,PeterParker,Peter Parker,Itisgood2Bbad!,"CN=Users, DC=WIN500, DC=local"
+Stark,Tony,TonyStark,Tony Stark,,"CN=Users, DC=WIN500, DC=local"
+Pince,Diana,DianaPrince,Diana Prince,Itisgood2Bbad!,"CN=Users, DC=WIN500, DC=local"
