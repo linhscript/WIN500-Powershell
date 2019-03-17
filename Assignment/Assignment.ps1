@@ -405,6 +405,11 @@ until ($choice -eq 4)
 function Sub_menu7()   ## Action Function
 {
 
+     Register-PSSessionConfiguration -Path "$HOME\Assignment.pssc" -name Assignment -ShowSecurityDescriptorUI -Force
+
+     Write-Host "Constrained Endpoint has been registed sucessfully"
+
+     
      
 }
 
