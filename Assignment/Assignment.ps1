@@ -9,6 +9,7 @@
 Clear-Host
 
 ## Input
+
 $option = 0
 $choice = 0
 
@@ -203,14 +204,14 @@ function Sub_menu2()  ## Action function
 
     foreach ($item in $reset_coms)
     {
-        Restart-Computer -ComputerName $item
-        sleep 5
+        Restart-Computer -ComputerName $item -Force
+        sleep 3
         do {
             Write-Host "Server $item is restarting `n"
         }until (Test-Connection $item -Quiet)
      
         Write-Host "RESTART DONE `n"   
-        sleep 3
+        sleep 6
         $ip = (Test-Connection -ComputerName $item -ErrorAction SilentlyContinue).IPV4Address.IPaddresstostring[0]
         $st = (Get-CimInstance -ComputerName $item -ClassName Win32_operatingsystem).LastBootUpTime
 
@@ -230,10 +231,17 @@ function Sub_menu3()
 function s3.1(){
     Clear-Host
     $session_name = Read-Host "Enter a Session Name "
-    $session_computer = Read-Host "Enter computer want to connect "
-    New-PSSession -ComputerName $session_computer -Name $session_name
-    Get-PSSession
+    $global:session_computer = Read-Host "Enter computer want to connect "
+    New-PSSession -ComputerName $session_computer -Name $session_name 
 
+}
+
+function s3.2(){
+
+    Clear-Host
+    Enter-PSSession -ComputerName $global:session_computer 
+    exit
+       
 }
 
 function s3.3(){
@@ -247,6 +255,7 @@ function s3.4(){
 
     Clear-Host
     Remove-PSSession *
+    Write-host "Sessiones have been removed"
         
 }
 
@@ -288,16 +297,17 @@ function Sub_menu4()
              $logon=(Get-ADUser -Identity $user_check -Properties "LastLogonDate" ).LastLogonDate
              if ($logon){
 
-                Write-Host "User $user_check has last Login at: $logon"
+                Write-Host "User $user_check has last Login at: $logon `n"
               }else{
-                 Write-Host "User $user_check never loged on the system"   
+                 Write-Host "User $user_check never loged on the system `n"   
                 }
          }else{
              Write-Host "`nUser $user_check is NOT ACTIVE `n"
          }
     }else{
-         Write-Host "User $user_check is not available"
+         Write-Host "User $user_check is not available `n"
     }
+    Pause
     
 }
 
@@ -344,6 +354,8 @@ function s5.3{
 
     Write-Host "Group $global:groupname  has been restricted to use Powershell"
     Set-GPPermission -Name "Limit Use Powershell" -PermissionLevel GpoApply -TargetName $global:groupname -TargetType Group
+
+    Write-host "Updating Policy"
     gpupdate /force
 
 }
@@ -407,10 +419,15 @@ function Sub_menu7()   ## Action Function
 
      Register-PSSessionConfiguration -Path "$HOME\Assignment.pssc" -name Assignment -ShowSecurityDescriptorUI -Force
 
+     
+
      Write-Host "Constrained Endpoint has been registed sucessfully"
+
+     Write-Host "Limit usage: Add-NewUser,Get-Computerinfo,Measure-Object,Set-LogonTime"
 
      
      
+    
 }
 
 ################ JPEG FILE ##############
@@ -443,6 +460,8 @@ function s8.2(){
 
     {
         $pic = Get-ChildItem -Path C:\Temp\Picture
+        remove-item C:\Temp\Picture\* -Force
+        sleep 2
         $allfiles = Get-ChildItem -Recurse -Include *jpg -path C:\Users | Where Directory -NotLike "*Picture*" 
 
         foreach ($item in $allfiles)
